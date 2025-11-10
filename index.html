@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EduNotes - Educational Notes Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+      body, * { box-sizing: border-box; }
+      .gradient-bg { background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); }
+      .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+      .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    </style>
+  </head>
+
+  <body class="min-h-full bg-gray-50 text-gray-900">
+    <!-- Navbar -->
+    <nav class="shadow-md bg-white sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <svg class="w-8 h-8 mr-2 text-blue-600" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" />
+            <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" />
+            <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" />
+          </svg>
+          <span class="text-2xl font-bold text-blue-600">EduNotes</span>
+        </div>
+        <div class="hidden md:flex space-x-8">
+          <a href="#home" class="hover:opacity-80">Home</a>
+          <a href="#features" class="hover:opacity-80">Features</a>
+          <a href="#downloads" class="hover:opacity-80">Downloads</a>
+          <a href="#contact" class="hover:opacity-80">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="gradient-bg py-20 px-4 text-white text-center" id="home">
+      <h1 class="text-5xl font-bold mb-6">Access Free Educational Notes</h1>
+      <p class="text-xl mb-8 opacity-90">From Class 1 to Graduation</p>
+      <button id="cta-button" class="px-8 py-4 rounded-lg bg-blue-600 font-semibold text-lg hover:scale-105 transition-all">Browse Notes</button>
+    </header>
+
+    <!-- Features -->
+    <section class="py-16 px-4" id="features">
+      <div class="max-w-7xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-12">Why Choose EduNotes?</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="p-8 bg-white rounded-xl shadow-lg card-hover">
+            <div class="text-4xl mb-4">📘</div>
+            <h3 class="text-2xl font-bold mb-3">Quality Content</h3>
+            <p class="opacity-80">Expert-curated notes covering all subjects comprehensively.</p>
+          </div>
+          <div class="p-8 bg-white rounded-xl shadow-lg card-hover">
+            <div class="text-4xl mb-4">📂</div>
+            <h3 class="text-2xl font-bold mb-3">Free Downloads</h3>
+            <p class="opacity-80">Instantly download notes in PDF format for offline studying.</p>
+          </div>
+          <div class="p-8 bg-white rounded-xl shadow-lg card-hover">
+            <div class="text-4xl mb-4">🔄</div>
+            <h3 class="text-2xl font-bold mb-3">Regular Updates</h3>
+            <p class="opacity-80">Fresh content added regularly to match new curricula.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Downloads with Filters -->
+    <section class="py-16 px-4 bg-gray-100" id="downloads">
+      <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-8">Download Notes</h2>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap justify-center gap-4 mb-10">
+          <select id="classFilter" class="px-4 py-2 border rounded-lg">
+            <option value="">All Classes</option>
+          </select>
+          <select id="subjectFilter" class="px-4 py-2 border rounded-lg">
+            <option value="">All Subjects</option>
+          </select>
+          <button id="resetFilters" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Reset</button>
+        </div>
+
+        <!-- Notes Grid -->
+        <div id="downloads-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Dynamic cards load here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="py-16 px-4" id="contact">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-4xl font-bold mb-6">Get Started Today</h2>
+        <p class="text-xl mb-8 opacity-80">Join thousands of students who are excelling with EduNotes</p>
+        <a href="#downloads" class="px-8 py-4 rounded-lg font-semibold text-lg shadow-lg bg-blue-600 text-white hover:bg-blue-700 transition">Start Learning Now</a>
+      </div>
+    </section>
+
+    <footer class="py-8 px-4 bg-white shadow-inner text-center">
+      <p class="opacity-80">© 2024 EduNotes. All rights reserved.</p>
+    </footer>
+
+    <script>
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.querySelector(link.getAttribute('href'));
+          target && target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      document.getElementById("cta-button").addEventListener("click", () => {
+        document.getElementById("downloads").scrollIntoView({ behavior: "smooth" });
+      });
+
+      // Dynamic Notes
+      let allNotes = [];
+
+      async function loadNotes() {
+        const res = await fetch("notes.json");
+        allNotes = await res.json();
+        populateFilters();
+        renderNotes(allNotes);
+      }
+
+      function populateFilters() {
+        const classSet = new Set(allNotes.map(n => n.class));
+        const subjectSet = new Set(allNotes.map(n => n.subject));
+
+        const classSelect = document.getElementById("classFilter");
+        const subjectSelect = document.getElementById("subjectFilter");
+
+        classSet.forEach(c => {
+          classSelect.innerHTML += `<option value="${c}">${c}</option>`;
+        });
+        subjectSet.forEach(s => {
+          subjectSelect.innerHTML += `<option value="${s}">${s}</option>`;
+        });
+      }
+
+      function renderNotes(notes) {
+        const grid = document.getElementById("downloads-grid");
+        if (notes.length === 0) {
+          grid.innerHTML = `<p class="text-red-600 col-span-full">No notes found for selected filters.</p>`;
+          return;
+        }
+
+        grid.innerHTML = notes.map(n => `
+          <div class="p-6 bg-white rounded-xl shadow-lg card-hover text-center">
+            <h3 class="text-xl font-bold mb-2">${n.title}</h3>
+            <p class="text-sm mb-2 text-gray-600">${n.class} — ${n.subject}</p>
+            <p class="text-sm mb-4 opacity-80">${n.description}</p>
+            <a href="${n.file}" download class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+              Download PDF
+            </a>
+          </div>
+        `).join('');
+      }
+
+      // Filter logic
+      document.getElementById("classFilter").addEventListener("change", applyFilters);
+      document.getElementById("subjectFilter").addEventListener("change", applyFilters);
+      document.getElementById("resetFilters").addEventListener("click", () => {
+        document.getElementById("classFilter").value = "";
+        document.getElementById("subjectFilter").value = "";
+        renderNotes(allNotes);
+      });
+
+      function applyFilters() {
+        const classVal = document.getElementById("classFilter").value;
+        const subjectVal = document.getElementById("subjectFilter").value;
+        const filtered = allNotes.filter(n =>
+          (!classVal || n.class === classVal) &&
+          (!subjectVal || n.subject === subjectVal)
+        );
+        renderNotes(filtered);
+      }
+
+      loadNotes();
+    </script>
+  </body>
+</html>

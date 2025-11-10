@@ -1,0 +1,44 @@
+[
+  {
+    "class": "Class 10",
+    "subject": "Science",
+    "title": "Class 10 Science Notes",
+    "description": "Comprehensive notes for all chapters in Class 10 Science.",
+    "file": "notes/class10-science.pdf"
+  },
+  {
+    "class": "Class 10",
+    "subject": "Mathematics",
+    "title": "Class 10 Maths Notes",
+    "description": "All formulas and solved problems for Class 10 Maths.",
+    "file": "notes/class10-maths.pdf"
+  },
+  {
+    "class": "Class 12",
+    "subject": "Physics",
+    "title": "Class 12 Physics Notes",
+    "description": "Detailed derivations, formulas, and solved examples.",
+    "file": "notes/class12-physics.pdf"
+  },
+  {
+    "class": "Class 12",
+    "subject": "Chemistry",
+    "title": "Class 12 Chemistry Notes",
+    "description": "Complete organic and inorganic chemistry chapters.",
+    "file": "notes/class12-chemistry.pdf"
+  },
+  {
+    "class": "engineering ",
+    "subject": "OS",
+    "title": "OS Notes",
+    "description": "Detailed derivations, formulas, and solved examples.",
+    "file": "OS UNIT 1 (Introduction To OS and Linux).pdf"
+  },
+  {
+    "class": "B.Sc",
+    "subject": "Computer Science",
+    "title": "B.Sc Computer Science Notes",
+    "description": "Data structures, algorithms, and programming concepts.",
+    "file": "notes/bsc-compsci.pdf"
+  }
+]
